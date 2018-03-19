@@ -44,6 +44,18 @@ public interface ConnectionBase {
     void setReconnectOnError(boolean reconnectOnError);
 
     /**
+     * Sets weather the connection should be disconnected
+     * on error
+     * @param disconnectOnError weather to disconnect on error or not
+     */
+    void setDisconnectOnError (boolean disconnectOnError);
+
+    /**
+     * Lets user reconnect
+     */
+    void reconnect();
+
+    /**
      * Sets the groups token the connection should use
      */
     void setGroupsToken(String groupsToken);

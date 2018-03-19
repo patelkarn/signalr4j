@@ -86,7 +86,9 @@ public class Connection implements ConnectionBase {
 
     private Object mStartLock = new Object();
 
-    private boolean reconnectOnError = true;
+    private boolean reconnectOnError = false;
+
+    private boolean disconnectOnError = false;
 
     /**
      * Initializes the connection with an URL
@@ -202,6 +204,11 @@ public class Connection implements ConnectionBase {
     @Override
     public void setReconnectOnError(boolean reconnectOnError) {
         this.reconnectOnError = reconnectOnError;
+    }
+
+    @Override
+    public void setDisconnectOnError(boolean disconnectOnError) {
+        this.disconnectOnError = disconnectOnError;
     }
 
     @Override
@@ -676,7 +683,7 @@ public class Connection implements ConnectionBase {
                     log("Timeout", LogLevel.Information);
                     if(reconnectOnError)
                         reconnect();
-                    else
+                    else if (disconnectOnError)
                         disconnect();
                 }
             });
@@ -788,7 +795,7 @@ public class Connection implements ConnectionBase {
             if ( (mState == ConnectionState.Connected || mState == ConnectionState.Reconnecting) && reconnectOnError) {
                 log("Triggering reconnect", LogLevel.Verbose);
                 reconnect();
-            } else {
+            } else if (disconnectOnError){
                 log("Triggering disconnect", LogLevel.Verbose);
                 if (mOnError != null) {
                     mOnError.onError(error);
@@ -814,7 +821,7 @@ public class Connection implements ConnectionBase {
     /**
      * Stops the heartbeat monitor and re-starts the transport
      */
-    private void reconnect() {
+    public void reconnect() {
         if (mState == ConnectionState.Connected || mState == ConnectionState.Reconnecting) {
             log("Stopping Heartbeat monitor", LogLevel.Verbose);
             mHeartbeatMonitor.stop();

@@ -159,6 +159,16 @@ public class MockConnection implements ConnectionBase {
     }
 
     @Override
+    public void setDisconnectOnError(boolean disconnectOnError) {
+
+    }
+
+    @Override
+    public void reconnect() {
+
+    }
+
+    @Override
     public void setGroupsToken(String groupsToken) {
         // TODO Auto-generated method stub
 
