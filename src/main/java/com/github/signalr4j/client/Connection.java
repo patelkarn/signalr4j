@@ -801,6 +801,8 @@ public class Connection implements ConnectionBase {
                     mOnError.onError(error);
                 }
                 disconnect();
+            } else if (mOnError != null) {
+                mOnError.onError(error);
             }
         } else {
             if (mOnError != null) {
